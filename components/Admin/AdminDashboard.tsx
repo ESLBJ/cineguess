@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { Movie } from '../../types';
 import { db } from '../../services/dbService';

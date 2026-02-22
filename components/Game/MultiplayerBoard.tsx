@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Room, Player, Movie } from '../../types';
 import { soundService } from '../../services/soundService';

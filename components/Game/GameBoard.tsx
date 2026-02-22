@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Movie, RoundResult, User } from '../../types';
 import RoundTimer from './RoundTimer';

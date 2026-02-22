@@ -1,16 +1,18 @@
 
+"use client";
+
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import GameBoard from './components/Game/GameBoard';
-import MultiplayerBoard from './components/Game/MultiplayerBoard';
-import AdminDashboard from './components/Admin/AdminDashboard';
-import { User, Movie, RoundResult, LeaderboardEntry } from './types';
-import { auth } from './services/authService';
-import { db } from './services/dbService';
+import Navbar from '@/components/Navbar';
+import GameBoard from '@/components/Game/GameBoard';
+import MultiplayerBoard from '@/components/Game/MultiplayerBoard';
+import AdminDashboard from '@/components/Admin/AdminDashboard';
+import { User, Movie, RoundResult, LeaderboardEntry } from '@/types';
+import { auth } from '@/services/authService';
+import { db } from '@/services/dbService';
 
 type View = 'home' | 'auth' | 'game' | 'results' | 'leaderboard' | 'admin' | 'profile' | 'multiplayer';
 
-const App: React.FC = () => {
+export default function Home() {
   const [view, setView] = useState<View>('home');
   const [user, setUser] = useState<User | null>(null);
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
@@ -50,12 +52,16 @@ const App: React.FC = () => {
   }, []);
 
   const loadData = async () => {
-    const [movies, board] = await Promise.all([
-      db.getMovies(),
-      db.getLeaderboard()
-    ]);
-    setAllMovies(movies);
-    setLeaderboard(board);
+    try {
+      const [movies, board] = await Promise.all([
+        db.getMovies(),
+        db.getLeaderboard()
+      ]);
+      setAllMovies(movies);
+      setLeaderboard(board);
+    } catch (err) {
+      console.error("Failed to load data:", err);
+    }
   };
 
   const handleLogout = () => {
@@ -257,7 +263,10 @@ const App: React.FC = () => {
               <p className="text-center text-gray-500 text-sm">
                 {authForm.isRegister ? 'Already have an account?' : "Don't have an account?"}{' '}
                 <button 
-                  onClick={() => setAuthForm({...authForm, isRegister: !authForm.isRegister, error: ''})}
+                  onClick={() => {
+                    setAuthForm({...authForm, isRegister: !authForm.isRegister});
+                    setError('');
+                  }}
                   className="text-white hover:text-red-500 font-bold underline underline-offset-4"
                 >
                   {authForm.isRegister ? 'Log In' : 'Sign Up'}
@@ -431,7 +440,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-red-600 selection:text-white">
-      <Navbar user={user} onLogout={handleLogout} onNavigate={setView} />
+      <Navbar user={user} onLogout={handleLogout} onNavigate={(path) => setView(path as any)} />
       <main className="pt-16 pb-20">
         {renderView()}
       </main>
@@ -441,6 +450,4 @@ const App: React.FC = () => {
       </footer>
     </div>
   );
-};
-
-export default App;
+}
