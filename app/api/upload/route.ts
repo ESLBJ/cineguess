@@ -13,7 +13,6 @@ export async function POST(request: Request) {
   try {
     const blob = await put(filename, request.body!, {
       access: 'public',
-      token: process.env.BLOB_READ_WRITE_TOKEN
     });
     return NextResponse.json(blob);
   } catch (err) {
