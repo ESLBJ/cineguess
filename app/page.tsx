@@ -439,9 +439,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-black text-white selection:bg-red-600 selection:text-white flex flex-col items-center justify-center">
       <Navbar user={user} onLogout={handleLogout} onNavigate={(path) => setView(path as any)} />
-      <main className="pt-16 pb-20">
+      <main className="pt-16 pb-20 w-full">
         {renderView()}
       </main>
       
